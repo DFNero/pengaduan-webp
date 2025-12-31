@@ -1,37 +1,29 @@
+import type { LoginResponse } from '~/types/auth'
+
 export const useAuth = () => {
-  const { $supabase } = useNuxtApp()
   const user = useState<any>('user', () => null)
 
-  const register = async (email: string, password: string, name: string) => {
-    const { data, error } = await $supabase.auth.signUp({
-        email,
-        password
+  const login = async (email: string, password: string): Promise<LoginResponse> => {
+    const res = await $fetch<LoginResponse>('/api/auth/login', {
+      method: 'POST',
+      body: { email, password }
     })
 
-    if (error) throw error
-    if (!data.user) throw new Error('Register failed')
-
-    const { error: profileError } = await $supabase
-        .from('profiles')
-        .insert({
-        id: data.user.id,
-        name
-        })
-
-    if (profileError) throw profileError
-
-    user.value = data.user
-    }
-
-
-  const login = async (email: string, password: string) => {
-    const { data, error } = await $supabase.auth.signInWithPassword({
-      email,
-      password
-    })
-    if (error) throw error
-    user.value = data.user
+    user.value = res
+    return res
   }
 
-  return { user, login, register }
+  const register = async (name: string, email: string, password: string) => {
+    return await $fetch('/api/auth/register', {
+      method: 'POST',
+      body: { name, email, password }
+    })
+  }
+
+  const logout = async () => {
+    await $fetch('/api/auth/logout', { method: 'POST' })
+    user.value = null
+  }
+
+  return { user, login, register, logout }
 }

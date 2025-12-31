@@ -1,28 +1,26 @@
 <script setup lang="ts">
 const { register } = useAuth()
-
 const name = ref('')
 const email = ref('')
 const password = ref('')
 
 const submit = async () => {
   try {
-    await register(email.value, password.value, name.value)
-    navigateTo('/app')
+    await register(name.value, email.value, password.value)
+    alert('Register berhasil')
+    navigateTo('/login')
   } catch (e: any) {
-    alert(e.message)
+    alert(e.data?.message || 'Register gagal')
   }
 }
 </script>
 
 <template>
-  <h1>Register</h1>
-
-  <input v-model="name" placeholder="Name" />
-  <input v-model="email" placeholder="Email" />
-  <input v-model="password" type="password" />
-
-  <button @click="submit">Register</button>
-
-  <NuxtLink to="/login">Already have account?</NuxtLink>
+  <div>
+    <h1>Register</h1>
+    <input v-model="name" placeholder="Nama" />
+    <input v-model="email" placeholder="Email" />
+    <input v-model="password" type="password" placeholder="Password" />
+    <button @click="submit">Daftar</button>
+  </div>
 </template>
