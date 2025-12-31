@@ -25,5 +25,4 @@ const testConnection = async () => {
   }
 }
 
-// langsung panggil biar muncul saat npm run dev
 testConnection()
