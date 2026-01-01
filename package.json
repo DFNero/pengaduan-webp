@@ -1,5 +1,5 @@
 {
-  "name": "notamin",
+  "name": "pengaduan",
   "type": "module",
   "private": true,
   "scripts": {
@@ -13,6 +13,7 @@
     "@nuxt/eslint": "^1.12.1",
     "@supabase/supabase-js": "^2.89.0",
     "bcryptjs": "^3.0.3",
+    "docx": "^9.5.1",
     "eslint": "^9.39.2",
     "jsonwebtoken": "^9.0.3",
     "mysql2": "^3.16.0",
@@ -21,9 +22,7 @@
     "vue-router": "^4.6.4"
   },
   "devDependencies": {
-    "@types/jsonwebtoken": "^9.0.10",
-    "autoprefixer": "^10.4.23",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.18"
+    "@tailwindcss/postcss": "^4.1.18",
+    "@types/jsonwebtoken": "^9.0.10"
   }
 }

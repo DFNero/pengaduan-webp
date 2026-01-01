@@ -1,42 +1,28 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+// nuxt.config.ts
 export default defineNuxtConfig({
-  compatibilityDate: '2025-07-15',
+  compatibilityDate: "2025-07-15",
+
+  css: [],
+
+  modules: ["@nuxt/eslint"],
 
   devtools: {
     enabled: true,
-
     timeline: {
-      enabled: true
-    }
+      enabled: true,
+    },
   },
 
-  modules: ['@nuxt/eslint'],
-
-  // 🔥 INI YANG KAMU KURANG
   imports: {
-    dirs: ['composables']
+    dirs: ["composables"],
   },
 
   typescript: {
-    strict: true
+    strict: true,
   },
 
   runtimeConfig: {
-    public: {
-      supabaseUrl: '',
-      supabaseAnonKey: ''
-    }
-  }
-})
-
-export default defineNuxtConfig({
-  css: ['~/assets/css/tailwind.css'],
-  modules: ['@nuxt/eslint'],
-  devtools: { enabled: true },
-})
-
-export default defineNuxtConfig({
-  runtimeConfig: {
-    jwtSecret: process.env.JWT_SECRET
-  }
-})
+    jwtSecret: process.env.JWT_SECRET,
+    public: {},
+  },
+});

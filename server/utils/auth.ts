@@ -1,30 +1,41 @@
-import { getCookie } from 'h3'
+import { getCookie, createError, H3Event } from 'h3'
 import jwt from 'jsonwebtoken'
 
-const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret'
+interface JwtPayload {
+  id: number
+  role: 'user' | 'admin'
+}
 
-export function requireAuth(event: any) {
+export function requireAuth(event: H3Event): JwtPayload {
   const token = getCookie(event, 'token')
+
   if (!token) {
     throw createError({
       statusCode: 401,
-      statusMessage: 'Unauthorized'
+      statusMessage: 'Unauthorized',
     })
   }
-  return token
-}
 
-export function getUserFromSession(event: any) {
-  const token = requireAuth(event)
+  const config = useRuntimeConfig()
+
+  if (!config.jwtSecret) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'JWT secret not configured',
+    })
+  }
+
   try {
-    return jwt.verify(token, JWT_SECRET) as {
-      id: number
-      role: 'user' | 'admin'
-    }
+    const decoded = jwt.verify(
+      token,
+      config.jwtSecret
+    ) as JwtPayload
+
+    return decoded
   } catch {
     throw createError({
       statusCode: 401,
-      statusMessage: 'Invalid token'
+      statusMessage: 'Invalid token',
     })
   }
 }

@@ -1,17 +1,18 @@
-import { db } from '../../utils/db';
-import { getUserFromSession } from '../../utils/auth';
+import { db } from '../../utils/db'
+import { requireAuth } from '../../utils/auth'
 
 export default defineEventHandler(async (event) => {
-  const user = await getUserFromSession(event)
-  if (!user || user.role !== 'admin') {
+  const user = requireAuth(event)
+
+  if (user.role !== 'admin') {
     throw createError({ statusCode: 403 })
   }
 
   const [rows] = await db.query(`
-    SELECT complaints.*, users.name
-    FROM complaints
-    JOIN users ON users.id = complaints.user_id
-    ORDER BY complaints.created_at DESC
+    SELECT c.*, u.name
+    FROM complaints c
+    JOIN users u ON c.user_id = u.id
+    ORDER BY c.created_at DESC
   `)
 
   return rows
